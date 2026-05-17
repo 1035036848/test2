@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://bxq12y3z4a5b6"]
+
+[ext_resource type="Script" path="res://scripts_2d/main_2d.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts_2d/player_2d.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts_2d/platform_manager_2d.gd" id="3_platform"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(50, 50)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(540, 1600)
+script = ExtResource("2_player")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="ColorRect" type="ColorRect" parent="Player"]
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+color = Color(0.294, 0.545, 0.749, 1)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(0, -500)
+limit_left = -1000
+limit_right = 1000
+limit_top = -1000
+limit_bottom = 1000
+limit_smoothed = true
+smoothing_enabled = true
+smoothing_speed = 5.0
+
+[node name="PlatformManager" type="Node2D" parent="."]
+script = ExtResource("3_platform")
+
+[node name="SpawnTimer" type="Timer" parent="PlatformManager"]
+wait_time = 4.0
+autostart = true
+
+[node name="ScrollTimer" type="Timer" parent="."]
+wait_time = 0.016
+autostart = true
+
+[node name="GroundCheckTimer" type="Timer" parent="Player"]
+wait_time = 0.05
+autostart = true
+
+[connection signal="timeout" from="PlatformManager/SpawnTimer" to="PlatformManager" method="_on_spawn_timer_timeout"]
+[connection signal="timeout" from="ScrollTimer" to="." method="_on_scroll_timer_timeout"]
+[connection signal="timeout" from="Player/GroundCheckTimer" to="Player" method="_on_ground_check_timer_timeout"]
