@@ -1,0 +1,42 @@
+# Godot specific
+.godot/
+*.import
+
+# Build outputs
+bin/
+*.pck
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Export templates
+export/
+export_presets.cfg
+
+# IDE
+.vscode/
+.vs/
+*.code-workspace
+*.sublime-*
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+~*
+
+# Logs
+*.log
+
+# Temporary
+*.tmp
+*.bak
+*.swp
+
+# Mono
+.mono/
+
+# User files
+*.cfg
+*.godot/

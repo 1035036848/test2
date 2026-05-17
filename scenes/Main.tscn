@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path_type="Script" path="res://scripts/GameManager.gd" id="1"]
+[ext_resource path_type="Script" path="res://scripts/Player.gd" id="2"]
+[ext_resource path_type="Script" path="res://scripts/Platform.gd" id="3"]
+
+[sub_resource type="BoxShape" id="SubResource1"]
+extents = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh2"]
+size = Vector3(1, 1, 1)
+
+[node name="GameManager" type="Node3D"]
+script = ExtResource("1")
+
+[node name="Player" type="RigidBody" parent="."]
+mode = 1
+script = ExtResource("2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("SubResource1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("BoxMesh2")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, -0.087, 0.996, 0, -0.996, -0.087, 0, 10, 10)
+fov = 70.0
+
+[node name="PlayerCheckTimer" type="Timer" parent="Player"]
+wait_time = 0.05
+autostart = true
+
+[node name="PlatformManager" type="Node3D" parent="."]
+script = ExtResource("3")
+
+[node name="SpawnTimer" type="Timer" parent="PlatformManager"]
+wait_time = 4.0
+autostart = true
+
+[node name="ScrollTimer" type="Timer" parent="."]
+wait_time = 0.016
+autostart = true
+
+[connection signal="timeout" from="Player/PlayerCheckTimer" to="Player" method="_on_Timer_timeout"]
+[connection signal="timeout" from="PlatformManager/SpawnTimer" to="PlatformManager" method="_on_SpawnTimer_timeout"]
+[connection signal="timeout" from="ScrollTimer" to="." method="_on_ScrollTimer_timeout"]
