@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3 uid="uid://b8qx1c2y3d4e5"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts/platform_manager.gd" id="3_platform"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_player"
+size="Vector3(1, 1, 1)"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_player"
+size="Vector3(1, 1, 1)"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform"
+size="Vector3(5, 0.5, 1)"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform"
+size="Vector3(5, 0.5, 1)"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_main")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+script = ExtResource("2_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("BoxShape3D_player")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("BoxMesh_player")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 15, 10)
+fov = 60.0
+
+[node name="PlatformManager" type="Node3D" parent="."]
+script = ExtResource("3_platform")
+
+[node name="SpawnTimer" type="Timer" parent="PlatformManager"]
+wait_time = 4.0
+autostart = true
+
+[node name="ScrollTimer" type="Timer" parent="."]
+wait_time = 0.016
+autostart = true
+
+[node name="GroundCheckTimer" type="Timer" parent="Player"]
+wait_time = 0.05
+autostart = true
+
+[connection signal="timeout" from="PlatformManager/SpawnTimer" to="PlatformManager" method="_on_spawn_timer_timeout"]
+[connection signal="timeout" from="ScrollTimer" to="." method="_on_scroll_timer_timeout"]
+[connection signal="timeout" from="Player/GroundCheckTimer" to="Player" method="_on_ground_check_timer_timeout"]
